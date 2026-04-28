@@ -73,7 +73,7 @@ function Navbar() {
               Login
             </Link>
           )}
-          <a href="tel:+919876543210" className="action-primary hidden md:inline-flex">
+          <a href="tel:+919921390121" className="action-primary hidden md:inline-flex">
             <Phone className="h-4 w-4" />
             {t("cta.call")}
           </a>
