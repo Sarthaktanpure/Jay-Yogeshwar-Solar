@@ -2,10 +2,15 @@ const fs = require("fs");
 const path = require("path");
 const dotenv = require("dotenv");
 
-const envPath = path.resolve(process.cwd(), ".env");
+const candidateEnvPaths = [
+  path.resolve(process.cwd(), ".env"),
+  path.resolve(__dirname, "..", "..", ".env"),
+];
 
-if (fs.existsSync(envPath)) {
-  dotenv.config({ path: envPath });
+const resolvedEnvPath = candidateEnvPaths.find((candidatePath) => fs.existsSync(candidatePath));
+
+if (resolvedEnvPath) {
+  dotenv.config({ path: resolvedEnvPath });
 } else {
   dotenv.config();
 }
