@@ -1,7 +1,14 @@
 import axios from "axios";
 
+function getApiBaseUrl() {
+  const configuredBaseUrl = import.meta.env.VITE_API_BASE_URL || "https://jay-yogeshwar-solar.onrender.com";
+  const normalizedBaseUrl = configuredBaseUrl.replace(/\/+$/, "");
+
+  return normalizedBaseUrl.endsWith("/api") ? normalizedBaseUrl : `${normalizedBaseUrl}/api`;
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "https://jay-yogeshwar-solar.onrender.com/",
+  baseURL: getApiBaseUrl(),
   timeout: 10000,
 });
 
