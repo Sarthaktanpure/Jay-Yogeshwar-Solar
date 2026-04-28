@@ -36,15 +36,39 @@ function withFallbackOrigin(origins, fallbackOrigin) {
   return normalizedOrigins;
 }
 
+function withDevelopmentOrigins(origins, nodeEnv) {
+  if (nodeEnv === "production") {
+    return origins;
+  }
+
+  const devOrigins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:4173",
+    "http://127.0.0.1:4173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+  ];
+
+  return devOrigins.reduce((allOrigins, origin) => {
+    if (!allOrigins.includes(origin)) {
+      allOrigins.push(origin);
+    }
+
+    return allOrigins;
+  }, [...origins]);
+}
+
 const frontendUrl = process.env.FRONTEND_URL || "https://jay-yogeshwar-solar.vercel.app";
+const nodeEnv = process.env.NODE_ENV || "development";
 
 const env = {
-  nodeEnv: process.env.NODE_ENV || "development",
+  nodeEnv,
   port: Number(process.env.PORT || 5000),
   mongoUri: process.env.MONGO_URI || "",
-  requireDatabase: parseBoolean(process.env.REQUIRE_DATABASE, process.env.NODE_ENV === "production"),
+  requireDatabase: parseBoolean(process.env.REQUIRE_DATABASE, nodeEnv === "production"),
   jwtSecret: process.env.JWT_SECRET || "change-me-before-production",
-  allowedOrigins: withFallbackOrigin(parseCsv(process.env.ALLOWED_ORIGINS), frontendUrl),
+  allowedOrigins: withDevelopmentOrigins(withFallbackOrigin(parseCsv(process.env.ALLOWED_ORIGINS), frontendUrl), nodeEnv),
   allowedAdminEmails: parseCsv(process.env.ALLOWED_ADMIN_EMAILS || "yogeshmhase08@gmail.com,sarthaktanpure255@gmail.com"),
   adminEmail: process.env.ADMIN_EMAIL || "admin@jayyogeshwarsolar.local",
   adminPassword: process.env.ADMIN_PASSWORD || "ChangeMe123!",

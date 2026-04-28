@@ -7,6 +7,22 @@ import { useAuth } from "../context/AuthContext";
 const initialLogin = { email: "", password: "" };
 const initialSignup = { name: "", email: "", password: "" };
 
+function getAuthErrorMessage(error) {
+  if (error.response?.data?.message) {
+    return error.response.data.message;
+  }
+
+  if (error.code === "ECONNABORTED") {
+    return "The server took too long to respond. Please try again in a moment.";
+  }
+
+  if (error.request) {
+    return "We could not reach the server. Please check the backend URL, CORS settings, or your network connection.";
+  }
+
+  return "We could not complete that request. Please try again.";
+}
+
 function AuthPage() {
   const { user, login, register } = useAuth();
   const navigate = useNavigate();
@@ -33,7 +49,7 @@ function AuthPage() {
     } catch (error) {
       setStatus({
         type: "error",
-        message: error.response?.data?.message || "We could not complete that request. Please try again.",
+        message: getAuthErrorMessage(error),
       });
     } finally {
       setSubmitting(false);
