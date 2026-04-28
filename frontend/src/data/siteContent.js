@@ -1,12 +1,12 @@
 export const contactDetails = {
-  phone: "+91 93079 19092",
-  whatsapp: "9307919092",
+  phone: "+9193079 19092",
+  whatsapp: "+919307919092",
   email: "yogeshmhase08@gmail.com",
   address: "Rahuri, Ahilyanagar district, Maharashtra",
 };
 
-8788375146;
-9921390121;
+// 8788375146;
+// 9921390121;
 
 export const serviceHighlights = [
   {
