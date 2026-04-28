@@ -57,6 +57,20 @@ function createApp({ dbState }) {
     }),
   );
 
+  app.get("/", (req, res) => {
+    if (env.frontendUrl) {
+      res.redirect(302, env.frontendUrl);
+      return;
+    }
+
+    res.json({
+      app: "Jay Yogeshwar Solar API",
+      status: "ok",
+      frontend: null,
+      health: "/api/health",
+    });
+  });
+
   app.get("/api/health", (req, res) => {
     res.json({
       status: "ok",

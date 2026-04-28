@@ -35,6 +35,7 @@ const env = {
   allowedAdminEmails: parseCsv(process.env.ALLOWED_ADMIN_EMAILS || "yogeshmhase08@gmail.com,sarthaktanpure255@gmail.com"),
   adminEmail: process.env.ADMIN_EMAIL || "admin@jayyogeshwarsolar.local",
   adminPassword: process.env.ADMIN_PASSWORD || "ChangeMe123!",
+  frontendUrl: process.env.FRONTEND_URL || "https://jay-yogeshwar-solar.vercel.app",
   cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY || "",
   cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET || "",
