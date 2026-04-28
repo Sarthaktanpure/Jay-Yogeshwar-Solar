@@ -56,7 +56,9 @@ function createApp({ dbState }) {
       },
     }),
   );
-
+  app.get("/", (req, res) => {
+    res.json({ app: "Jay Yogeshwar Solar API" });
+  });
   app.get("/api/health", (req, res) => {
     res.json({
       status: "ok",
