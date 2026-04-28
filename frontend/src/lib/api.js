@@ -1,11 +1,7 @@
 import axios from "axios";
 
-const apiBaseUrl = (
-  import.meta.env.VITE_API_BASE_URL || "https://jay-yogeshwar-solar.onrender.com/api"
-).replace(/\/+$/, "");
-
 const api = axios.create({
-  baseURL: apiBaseUrl,
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://jay-yogeshwar-solar.onrender.com/",
   timeout: 10000,
 });
 
