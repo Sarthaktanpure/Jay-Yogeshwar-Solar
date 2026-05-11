@@ -33,6 +33,20 @@ async function uploadFile(file, resourceType, folder) {
   };
 }
 
+async function uploadImageAsset(imageFile, folder) {
+  if (imageFile && (!env.cloudinaryCloudName || !env.cloudinaryApiKey || !env.cloudinaryApiSecret)) {
+    const error = new Error("Cloudinary credentials are not configured.");
+    error.statusCode = 503;
+    throw error;
+  }
+
+  try {
+    return imageFile ? await uploadFile(imageFile, "image", folder) : null;
+  } finally {
+    await removeTempFile(imageFile);
+  }
+}
+
 async function uploadProjectMedia({ imageFile, videoFile }) {
   if ((imageFile || videoFile) && (!env.cloudinaryCloudName || !env.cloudinaryApiKey || !env.cloudinaryApiSecret)) {
     const error = new Error("Cloudinary credentials are not configured.");
@@ -55,4 +69,4 @@ async function uploadProjectMedia({ imageFile, videoFile }) {
   }
 }
 
-module.exports = { uploadProjectMedia };
+module.exports = { uploadProjectMedia, uploadImageAsset };

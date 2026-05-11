@@ -39,6 +39,8 @@ const mockStore = {
     },
   ],
   comments: [],
+  dailyPosts: [],
+  homeShowcases: [],
   leads: [],
 };
 

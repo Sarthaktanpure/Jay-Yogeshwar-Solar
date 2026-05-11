@@ -3,20 +3,25 @@ import {
   BadgeCheck,
   BatteryCharging,
   Building2,
+  CalendarRange,
   Flame,
   Home,
   Lightbulb,
   MapPin,
+  Megaphone,
   Phone,
+  Sparkles,
   Sun,
   Tractor,
   Droplets,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import solarImage from "../assets/solar.jpg";
 import SectionHeading from "../components/SectionHeading";
 import { serviceHighlights, stats } from "../data/siteContent";
+import api from "../lib/api";
 
 const companyHighlights = [
   "Authorized dealer for trusted solar brands",
@@ -104,6 +109,77 @@ const brandLogos = [
 
 function HomePage() {
   const { t } = useTranslation();
+  const [dailyPosts, setDailyPosts] = useState([]);
+  const [showcases, setShowcases] = useState([]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadHomeData() {
+      try {
+        const [{ data: showcaseData }, { data: dailyPostData }] = await Promise.all([
+          api.get("/home-showcases"),
+          api.get("/daily-posts"),
+        ]);
+
+        if (active) {
+          setShowcases(Array.isArray(showcaseData) ? showcaseData.filter((item) => item.image?.url) : []);
+          setDailyPosts(Array.isArray(dailyPostData) ? dailyPostData.filter((item) => item.image?.url) : []);
+        }
+      } catch {
+        if (active) {
+          setShowcases([]);
+          setDailyPosts([]);
+        }
+      }
+    }
+
+    loadHomeData();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const marqueeImages = useMemo(() => {
+    if (!showcases.length) {
+      return [];
+    }
+
+    return [...showcases, ...showcases];
+  }, [showcases]);
+
+  const featuredDailyPost = dailyPosts[0] || null;
+  const secondaryDailyPosts = dailyPosts.slice(1, 4);
+
+  function getDailyPostMeta(kind) {
+    switch (kind) {
+      case "offer":
+        return {
+          label: "Today's offer",
+          icon: Sparkles,
+          tone: "bg-amber-100 text-amber-900",
+        };
+      case "event":
+        return {
+          label: "Event update",
+          icon: CalendarRange,
+          tone: "bg-sky-100 text-sky-900",
+        };
+      case "update":
+        return {
+          label: "Solar update",
+          icon: Sun,
+          tone: "bg-emerald-100 text-emerald-900",
+        };
+      default:
+        return {
+          label: "Notice board",
+          icon: Megaphone,
+          tone: "bg-slate-200 text-slate-900",
+        };
+    }
+  }
 
   return (
     <>
@@ -176,6 +252,160 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {showcases.length ? (
+        <section className="section-band py-6 sm:py-8">
+          <div className="page-wrap">
+            <div className="overflow-hidden rounded-[2rem] border border-white/60 bg-[linear-gradient(180deg,rgba(255,255,255,0.7),rgba(255,255,255,0.42))] p-5 shadow-[0_28px_90px_rgba(31,90,42,0.08)] ring-1 ring-white/40 backdrop-blur-sm sm:p-6 lg:p-8">
+              <SectionHeading
+                eyebrow="Live Installations"
+                title="Non-stop project visuals from the field"
+                body="This section updates directly from the admin dashboard, so new installation images can be added anytime."
+              />
+
+              <div className="mt-8 space-y-4">
+                <div className="home-marquee-mask">
+                  <div className="home-marquee-track animate-home-marquee">
+                    {marqueeImages.map((item, index) => (
+                      <article
+                        key={`${item._id}-${index}`}
+                        className="home-marquee-card group"
+                      >
+                        <img
+                          src={item.image.url}
+                          alt={item.title || "Solar installation"}
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                        />
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-4 text-white">
+                          <p className="text-sm font-semibold sm:text-base">{item.title || "Solar installation"}</p>
+                          {item.subtitle ? <p className="mt-1 text-xs text-white/80 sm:text-sm">{item.subtitle}</p> : null}
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="home-marquee-mask">
+                  <div className="home-marquee-track animate-home-marquee-reverse">
+                    {[...marqueeImages].reverse().map((item, index) => (
+                      <article
+                        key={`reverse-${item._id}-${index}`}
+                        className="home-marquee-card group"
+                      >
+                        <img
+                          src={item.image.url}
+                          alt={item.title || "Solar installation"}
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                        />
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-4 text-white">
+                          <p className="text-sm font-semibold sm:text-base">{item.title || "Solar installation"}</p>
+                          {item.subtitle ? <p className="mt-1 text-xs text-white/80 sm:text-sm">{item.subtitle}</p> : null}
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {dailyPosts.length ? (
+        <section className="section-band py-4 sm:py-6">
+          <div className="page-wrap">
+            <div className="rounded-[2rem] bg-[linear-gradient(135deg,rgba(16,35,25,0.98)_0%,rgba(26,58,39,0.96)_48%,rgba(235,178,34,0.14)_100%)] p-6 text-white shadow-[0_28px_90px_rgba(15,23,42,0.22)] ring-1 ring-white/10 sm:p-8 lg:p-10">
+              <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div className="max-w-2xl space-y-3">
+                  <span className="inline-flex items-center rounded-full bg-white/12 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-yellow-300">
+                    Daily Posts
+                  </span>
+                  <h2 className="text-3xl font-bold text-white sm:text-4xl">
+                    Today&apos;s offers, event posters, and solar notices
+                  </h2>
+                  <p className="text-base leading-7 text-slate-200">
+                    Fresh updates from the Jay Yogeshwar Solar Energy System.
+                  </p>
+                </div>
+                <div className="max-w-md rounded-[1.4rem] border border-white/10 bg-white/8 px-4 py-3 text-sm leading-7 text-slate-200 backdrop-blur-sm">
+                  Making India Green
+                </div>
+              </div>
+
+              <div className="mt-8 grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+                {featuredDailyPost ? (
+                  <article className="group overflow-hidden rounded-[1.8rem] border border-white/12 bg-white/8 shadow-[0_26px_70px_rgba(0,0,0,0.24)] backdrop-blur-sm">
+                    <div className="relative h-[320px] overflow-hidden sm:h-[380px]">
+                      <img
+                        src={featuredDailyPost.image.url}
+                        alt={featuredDailyPost.title || "Daily solar post"}
+                        className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.02]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/18 to-transparent" />
+                      <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+                        {(() => {
+                          const meta = getDailyPostMeta(featuredDailyPost.kind);
+                          const Icon = meta.icon;
+                          return (
+                            <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${meta.tone}`}>
+                              <Icon className="h-3.5 w-3.5" />
+                              {meta.label}
+                            </span>
+                          );
+                        })()}
+                        <h3 className="mt-4 max-w-2xl text-2xl font-bold tracking-[-0.03em] text-white sm:text-3xl">
+                          {featuredDailyPost.title || "Daily solar update"}
+                        </h3>
+                        {featuredDailyPost.subtitle ? (
+                          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-200 sm:text-base">
+                            {featuredDailyPost.subtitle}
+                          </p>
+                        ) : null}
+                      </div>
+                    </div>
+                  </article>
+                ) : null}
+
+                <div className="grid gap-4">
+                  {secondaryDailyPosts.map((post) => {
+                    const meta = getDailyPostMeta(post.kind);
+                    const Icon = meta.icon;
+
+                    return (
+                      <article
+                        key={post._id}
+                        className="flex gap-4 rounded-[1.6rem] border border-white/12 bg-white/8 p-3 shadow-[0_18px_50px_rgba(0,0,0,0.16)] backdrop-blur-sm transition duration-300 hover:-translate-y-1"
+                      >
+                        <img
+                          src={post.image.url}
+                          alt={post.title || "Daily solar post"}
+                          className="h-24 w-24 shrink-0 rounded-[1.2rem] object-cover sm:h-28 sm:w-28"
+                        />
+                        <div className="min-w-0 py-1">
+                          <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${meta.tone}`}>
+                            <Icon className="h-3.5 w-3.5" />
+                            {meta.label}
+                          </span>
+                          <h3 className="mt-3 text-lg font-semibold text-white">{post.title || "Daily solar update"}</h3>
+                          {post.subtitle ? (
+                            <p className="mt-2 text-sm leading-6 text-slate-200">{post.subtitle}</p>
+                          ) : null}
+                        </div>
+                      </article>
+                    );
+                  })}
+
+                  {dailyPosts.length > 4 ? (
+                    <div className="rounded-[1.6rem] border border-dashed border-white/16 bg-white/6 p-5 text-sm leading-7 text-slate-200">
+                      More daily updates are already stored in the dashboard. The latest ones stay prioritized here automatically.
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <section className="section-band pt-6">
         <div className="page-wrap space-y-10">

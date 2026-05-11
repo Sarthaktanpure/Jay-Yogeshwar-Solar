@@ -2,6 +2,8 @@ const express = require("express");
 const { createAdminRouter } = require("./admin");
 const { createAuthRouter } = require("./auth");
 const { createCommentRouter } = require("./comments");
+const { createDailyPostsRouter } = require("./dailyPosts");
+const { createHomeShowcasesRouter } = require("./homeShowcases");
 const { createLeadRouter } = require("./leads");
 const { createProjectsRouter } = require("./projects");
 const { createResourceRouter } = require("./resources");
@@ -14,6 +16,8 @@ function apiRouter({ dbState }) {
   router.use("/auth", createAuthRouter(dbState));
   router.use("/admin", createAdminRouter({ dbState }));
   router.use("/comments", createCommentRouter({ dbState }));
+  router.use("/daily-posts", createDailyPostsRouter({ service }));
+  router.use("/home-showcases", createHomeShowcasesRouter({ service }));
   router.use("/projects", createProjectsRouter({ service }));
   router.use("/products", createResourceRouter({
     resourceName: "products",

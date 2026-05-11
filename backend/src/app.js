@@ -20,7 +20,8 @@ function createCorsOptions() {
         env.allowedOrigins.includes(origin) ||
         env.allowedOrigins.includes(origin + "/") ||
         (origin.startsWith("https://jay-yogeshwar-solar") && origin.endsWith(".vercel.app"))
-      ) {
+      ) 
+      {
         callback(null, true);
         return;
       }
