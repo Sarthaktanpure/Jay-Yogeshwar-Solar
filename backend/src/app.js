@@ -19,9 +19,9 @@ function createCorsOptions() {
         !origin ||
         env.allowedOrigins.includes(origin) ||
         env.allowedOrigins.includes(origin + "/") ||
-        (origin.startsWith("https://jay-yogeshwar-solar") && origin.endsWith(".vercel.app"))
-      ) 
-      {
+        (origin.startsWith("https://jay-yogeshwar-solar") &&
+          origin.endsWith(".vercel.app"))
+      ) {
         callback(null, true);
         return;
       }
@@ -73,6 +73,13 @@ function createApp({ dbState }) {
       databaseMode: dbState.mode,
     });
   });
+
+  app.get(
+    "/http://jay-yogeshwar-solar.onrender.com/loaderio-d73b01efbc5cf59751cba803d476478f.txt",
+    (req, res) => {
+      res.send(loaderio - d73b01efbc5cf59751cba803d476478f);
+    },
+  );
 
   app.use("/api", apiRouter({ dbState }));
 
