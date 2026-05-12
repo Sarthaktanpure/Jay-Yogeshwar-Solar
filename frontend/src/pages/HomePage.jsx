@@ -260,7 +260,7 @@ function HomePage() {
               <SectionHeading
                 eyebrow="Live Installations"
                 title="Non-stop project visuals from the field"
-                body="This section updates directly from the admin dashboard, so new installation images can be added anytime."
+                body="All images are officially uploaded by Jay Yogeshwar Solar Systems from real project sites."
               />
 
               <div className="mt-8 space-y-4">
@@ -466,7 +466,7 @@ function HomePage() {
               <SectionHeading
                 eyebrow="Authorized Brands"
                 title="Trusted solar brands we work with"
-                body="Showing the brand logos separately so visitors can quickly see the companies available through Jay Yogeshwar Solar."
+                body="We bring you products from leading companies through Jay Yogeshwar Solar."
               />
               <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {brandLogos.map((brand) => (

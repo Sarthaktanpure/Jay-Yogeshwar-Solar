@@ -37,6 +37,14 @@ function Footer() {
           <Link to="/contact">Lead Form</Link>
         </div>
       </div>
+      <div className="border-t border-green-900/10 bg-gradient-to-r from-[#f8f1d4] via-[#fffaf0] to-[#edf6e8]">
+        <div className="page-wrap flex flex-col items-center justify-between gap-3 py-4 text-center sm:flex-row sm:text-left">
+          <p className="text-xs uppercase tracking-[0.28em] text-slate-500">Designed and developed with care</p>
+          <p className="rounded-full border border-green-900/10 bg-white/80 px-4 py-2 text-sm text-slate-700 shadow-[0_12px_30px_rgba(31,90,42,0.08)]">
+            Website crafted by <span className="font-semibold tracking-[0.08em] text-slate-900">Sarthak Tanpure</span>
+          </p>
+        </div>
+      </div>
     </footer>
   );
 }
