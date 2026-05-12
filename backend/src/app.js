@@ -75,7 +75,7 @@ function createApp({ dbState }) {
   });
 
   app.get(
-    "/http://jay-yogeshwar-solar.onrender.com/loaderio-d73b01efbc5cf59751cba803d476478f.txt",
+    "/loaderio-d73b01efbc5cf59751cba803d476478f.txt",
     (req, res) => {
       res.send(loaderio - d73b01efbc5cf59751cba803d476478f);
     },
