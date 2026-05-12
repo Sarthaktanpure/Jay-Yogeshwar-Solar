@@ -75,11 +75,11 @@ function createApp({ dbState }) {
   });
 
   app.get(
-    "/loaderio-d73b01efbc5cf59751cba803d476478f.txt",
-    (req, res) => {
-      res.send(loaderio - d73b01efbc5cf59751cba803d476478f);
-    },
-  );
+  "/loaderio-d73b01efbc5cf59751cba803d476478f.txt",
+  (req, res) => {
+    res.send("loaderio-d73b01efbc5cf59751cba803d476478f");
+  }
+);
 
   app.use("/api", apiRouter({ dbState }));
 
