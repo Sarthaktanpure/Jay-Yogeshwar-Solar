@@ -9,6 +9,8 @@ import GalleryPage from "./pages/GalleryPage";
 import HomePage from "./pages/HomePage";
 import SolutionsPage from "./pages/SolutionsPage";
 import TrendsPage from "./pages/TrendsPage";
+import BlogPage from "./pages/BlogPage";
+import BlogPostPage from "./pages/BlogPostPage";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/trends" element={<TrendsPage />} />
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:id" element={<BlogPostPage />} />
         <Route
           path="/admin"
           element={
